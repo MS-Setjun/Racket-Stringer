@@ -10,7 +10,7 @@ from pages_.common import LOGO_PATH, save_strings
 
 def sidebar_navigation() -> str:
     if os.path.exists(LOGO_PATH):
-        st.sidebar.image(image=LOGO_PATH, width="stretch")
+        st.sidebar.image(image=LOGO_PATH)
     st.sidebar.title("Navigation")
     return st.sidebar.radio(
         "",
