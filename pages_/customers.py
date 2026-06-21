@@ -21,7 +21,7 @@ def page_customers(
             filtered["customer_name"].str.contains(name_filter, case=False)
         ]
 
-    st.dataframe(filtered)
+    st.dataframe(filtered, width="stretch")
 
     for _, row in filtered.iterrows():
         with st.expander(row["customer_name"]):

@@ -18,7 +18,7 @@ from pages_.common import (
 
 def page_dashboard(jobs_df: pd.DataFrame, strings_df: pd.DataFrame) -> pd.DataFrame:
     st.title("Dashboard")
-    col_a, col_b = st.columns(2, gap="large")
+    col_a, col_b = st.columns(2, gap="large", width="stretch")
 
     string_options = strings_df["string_type"].tolist()
 
