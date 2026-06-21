@@ -18,6 +18,9 @@ def page_finished_paid(jobs_df: pd.DataFrame) -> pd.DataFrame:
     finished["created_at_dt"] = pd.to_datetime(
         finished["created_at"], errors="coerce"
     )
+    finished = finished.sort_values(
+        "created_at_dt", ascending=False, na_position="last"
+    )
 
     name_filter = st.text_input("Filter by name")
 

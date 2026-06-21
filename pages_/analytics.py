@@ -7,6 +7,8 @@ import streamlit as st
 def page_analytics(jobs_df: pd.DataFrame) -> None:
     st.title("Analytics Dashboard")
 
+    jobs_df = jobs_df[jobs_df["customer_name"] != "No String"]
+
     if jobs_df.empty:
         st.info("No jobs available for analytics.")
         return
@@ -19,10 +21,3 @@ def page_analytics(jobs_df: pd.DataFrame) -> None:
 
     st.subheader("Top Customers (by number of jobs)")
     st.bar_chart(jobs_df["customer_name"].value_counts().head(10))
-
-    # st.subheader("Jobs Over Time")
-    # df_time = jobs_df.copy()
-    # df_time["created_at_dt"] = pd.to_datetime(df_time["created_at"], errors="coerce")
-    # df_time = df_time.dropna(subset=["created_at_dt"])
-    # df_time = df_time.groupby(df_time["created_at_dt"].dt.date).size()
-    # st.area_chart(df_time)
