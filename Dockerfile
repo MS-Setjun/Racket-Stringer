@@ -13,6 +13,12 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+# gosu lets the entrypoint start as root (to fix volume ownership) and then
+# drop to the unprivileged 'appuser' to actually run the app.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends gosu \
+    && rm -rf /var/lib/apt/lists/*
+
 # Install dependencies first so they're cached separately from app code
 COPY requirements.txt .
 RUN pip install -r requirements.txt
@@ -25,14 +31,15 @@ COPY . .
 # Data directory for stringing.db — mount this as a volume so data
 # survives container rebuilds/upgrades.
 RUN mkdir -p /app/data && useradd --create-home --uid 1000 appuser \
-    && chown -R appuser:appuser /app
+    && chown -R appuser:appuser /app \
+    && chmod +x /app/entrypoint.sh
 VOLUME ["/app/data"]
-
-USER appuser
 
 EXPOSE 8501
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8501/_stcore/health')" || exit 1
 
-ENTRYPOINT ["streamlit", "run", "app.py"]
+# NOTE: stays as root here — entrypoint.sh fixes the mounted volume's
+# ownership, then execs the app as 'appuser' itself.
+ENTRYPOINT ["/app/entrypoint.sh"]

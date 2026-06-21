@@ -17,7 +17,7 @@ def page_analytics(jobs_df: pd.DataFrame) -> None:
     st.bar_chart(jobs_df["string_type"].value_counts())
 
     st.subheader("Tension Distribution")
-    st.line_chart(jobs_df["tension_lbs"].value_counts().sort_index())
+    st.bar_chart(jobs_df["tension_lbs"].value_counts().sort_index())
 
     st.subheader("Top Customers (by number of jobs)")
     st.bar_chart(jobs_df["customer_name"].value_counts().head(10))
