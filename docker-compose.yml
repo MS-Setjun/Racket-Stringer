@@ -1,13 +1,14 @@
 services:
   racket-stringing:
-    build: .
+    container_name: racket-stringing
+    build:
+      context: https://github.com/MS-Setjun/Racket-Stringer.git
+      dockerfile: Dockerfile
     image: racket-stringing-app:latest
-    container_name: racket-stringing-app
-    ports:
-      - "8501:8501"
-    volumes:
-      - app-data:/app/data
     restart: unless-stopped
-
-volumes:
-  app-data:
+    volumes:
+      - /mnt/swimming/racket-stringing:/app/data
+    environment:
+      - APP_DATA_DIR=/app/data
+    ports:
+      - 8501:8501
